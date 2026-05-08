@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum ListingCategory {
+  FACTORY
+  INSTITUTE
+}
+
+enum ListingStatus {
+  CLOSED
+  AUCTION
+  OPERATIONAL
+}
+
+model User {
+  id        String    @id @default(cuid())
+  name      String?
+  email     String    @unique
+  listings  Listing[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Listing {
+  id           String          @id @default(cuid())
+  title        String
+  description  String
+  category     ListingCategory
+  status       ListingStatus
+  isVerified   Boolean         @default(false) @map("is_verified")
+  location     String
+  landArea     Float           @map("land_area")
+  powerLoadKva Float           @map("power_load_kva")
+  askingPrice  Decimal         @map("asking_price") @db.Decimal(18, 2)
+  images       String[]
+  ownerId      String
+  owner        User            @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+
+  @@map("listings")
+}

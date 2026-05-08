@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Link from "next/link";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -22,12 +23,40 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const navigationLinks = [
+    { href: "/buyer-requirements", label: "Buyer Requirements" },
+    { href: "/browse-listings", label: "Browse Listings" },
+    { href: "/add-listing", label: "Add Listing" },
+    { href: "/seller-dashboard", label: "Seller Dashboard" },
+  ];
+
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col bg-slate-50">
+        <header className="sticky top-0 z-40 border-b border-slate-200 bg-white/95 backdrop-blur">
+          <nav className="mx-auto flex w-full max-w-7xl flex-wrap items-center gap-2 px-4 py-3 md:px-8">
+            <Link
+              href="/"
+              className="mr-2 rounded-md px-2 py-1 text-sm font-semibold text-slate-900"
+            >
+              Factory Portal
+            </Link>
+            {navigationLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:bg-blue-50 hover:text-blue-700"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+        </header>
+        {children}
+      </body>
     </html>
   );
 }
