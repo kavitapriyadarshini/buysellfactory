@@ -150,7 +150,7 @@ export default function SellerDashboardPage() {
                             />
                           ))}
                         </Pie>
-                        <Tooltip formatter={(value: number) => formatNumber(value)} />
+                        <Tooltip formatter={(value) => (typeof value === 'number' ? formatNumber(value) : value)} />
                         <Legend verticalAlign="bottom" height={30} />
                       </PieChart>
                     </ResponsiveContainer>
